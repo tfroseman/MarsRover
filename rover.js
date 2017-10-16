@@ -7,6 +7,10 @@ module.exports = class MarsRover {
 		this.y = y;
 		this.direction = ['N', 'E', 'S', 'W'].findIndex(element => {return element === direction});
 	}
+
+	debugLocation() {
+		console.log(`I am now facing ${this.getDirection()} @ ${this.x} , ${this.y}`);
+	}
 	
 	getX(){
 		return this.x;
@@ -31,6 +35,8 @@ module.exports = class MarsRover {
 		}else {
 			this.direction += 1;
 		}
+
+		this.debugLocation();
 	}
 
 	turnRight(){
@@ -39,14 +45,21 @@ module.exports = class MarsRover {
 		}else{
 			this.direction -= 1;
 		}
+
+		this.debugLocation();
 	}
 
 	moveForward(){
 		this.y += 1;
+
+		this.debugLocation();
 	}
 
 	moveBackward(){
 		this.y -= 1;
+
+		this.debugLocation();
 	}
 
+	
 }

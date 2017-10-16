@@ -2,7 +2,7 @@
 /**
  * Develop an api that moves a rover around on a grid.
 
-• You are given the initial starting point (x,y) of a rover and the direction (N,S,E,W) it is facing.
+• DONE You are given the initial starting point (x,y) of a rover and the direction (N,S,E,W) it is facing.
 • The rover receives a character array of commands.
 • Implement commands that move the rover forward/backward (f,b).
 • Implement commands that turn the rover left/right (l,r).
@@ -13,10 +13,22 @@
 var MarsRover = require('./rover.js');
 
 
-function start(start_x, start_y, direction) {
+function start(start_x, start_y, direction, commands) {
+
 	let rover = new MarsRover(start_x, start_y, direction);
 	console.log(`The rover has been created at ${rover.getX()}, ${rover.getY()} and is facing ${rover.getDirection()}`);
+
+	commands.split('').forEach((command) => {
+		switch (command) {
+			case 'l': rover.turnLeft(); break;
+			case 'r': rover.turnRight(); break;
+			case 'f': rover.moveForward(); break;
+			case 'b': rover.moveBackward(); break; 
+		}
+	});
+
 }
 
 
-start(process.argv[2], process.argv[3], process.argv[4]);
+start(process.argv[2], process.argv[3], process.argv[4], process.argv[5]);
+
