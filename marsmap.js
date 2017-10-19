@@ -1,8 +1,15 @@
 'use strict';
 var file_system = require('fs');
-
+/**
+ * This acts like a gps(ish) service
+ */
 class MarsMap{
 
+	/**
+	 * Create a new map object
+	 * @param  {string} file_path Path to the map file
+	 * @return {object}           Map
+	 */
 	constructor(file_path){
 		var map = JSON.parse(file_system.readFileSync(file_path, 'utf8'));
 
@@ -12,12 +19,11 @@ class MarsMap{
 	}
 
 	/**
-	 * Return true if there is a obstacle at the given location
-	 * @param  {Object}		location Object containg the x and y positions
-	 * @return {Boolean}	Return true if there is an obstacle
+	 * Check if a position on the map has an obstacle
+	 * @param  {object}  location Object containing the location
+	 * @return {Boolean}          True if there is an obstacle
 	 */
 	hasObstacle(location){
-
 		return this.obstacle.some((element)=>{
 			if(element[0] === location.x && element[1] === location.y){
 				console.log(element);
@@ -27,18 +33,25 @@ class MarsMap{
 		});
 	}
 
+	/**
+	 * Helper to preform the wrap around the map for seemless movement around edges
+	 * @param  {object} location Location to check
+	 * @return {object}          new location after movement
+	 */
 	wrapMap(location){
 		let new_location = {
 			'x': 0,
 			'y': 0,
 		};
 
+		// wrap around the x axis
 		if ( location.x < 0 ) {
 			new_location.x = this.size_x;
 		}else if( location.x <= this.size_x ){
 			new_location.x = location.x;
 		}
 
+		// wrap around the y axis
 		if( location.y < 0 ){
 			new_location.y = this.size_y;
 		}else if( location.y <= this.size_y ){
@@ -49,9 +62,10 @@ class MarsMap{
 	}
 
 	/**
-	 * Tell the map the rover is moving
-	 * @param  {Object} new_location location Object containg the x and y positions
-	 * @return {Object}              new location for the rover
+	 * Called to move the rover
+	 * @param  {object} location        current rover location
+	 * @param  {object} location_change The changes in x and y
+	 * @return {object}                 location of the rover after trying to move
 	 */
 	moveRover(location, location_change){
 		let desired_location = {
@@ -62,10 +76,8 @@ class MarsMap{
 		desired_location = this.wrapMap(desired_location);
 
 		if(this.hasObstacle(desired_location)){
-			console.log(' conflict');
 			return location;
 		}else {
-			//console.log('nothing found');
 			return desired_location;
 		}
 	}
