@@ -17,9 +17,10 @@ class MarsMap{
 	 * @return {Boolean}	Return true if there is an obstacle
 	 */
 	hasObstacle(location){
-		this.obstacle.every((element)=>{
-			if(location.x === element.x && location.y === element.y){
-				console.log(element.x);
+
+		return this.obstacle.some((element)=>{
+			if(element[0] === location.x && element[1] === location.y){
+				console.log(element);
 				return true;
 			}
 			return false;
@@ -60,10 +61,12 @@ class MarsMap{
 
 		desired_location = this.wrapMap(desired_location);
 
-		if(!this.hasObstacle(desired_location)){
-			return desired_location;
-		}else {
+		if(this.hasObstacle(desired_location)){
+			console.log(' conflict');
 			return location;
+		}else {
+			//console.log('nothing found');
+			return desired_location;
 		}
 	}
 }
